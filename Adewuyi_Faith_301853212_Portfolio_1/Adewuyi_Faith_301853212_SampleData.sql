@@ -1,7 +1,7 @@
--- Abitim Farms: Portfolio 1
+ Portfolio 1
 -- Sample Data
 
--- Insert sample customers
+
 INSERT INTO customers (full_name, phone, email)
 VALUES
     ('Amina Bello', '08030000001', 'amina@example.com'),
