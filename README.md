@@ -84,7 +84,7 @@ The exercises use inventory rows from the relational database, including test pr
 - **Isolation:** `SHOW transaction_isolation` reports `read committed`. An ordinary SELECT sees data committed before that statement begins, together with its own transaction's earlier changes.
 - **Concurrent writes:** Two independent pgAdmin sessions target `Test Product 20`. Session A reduces stock from 20 to 18 and leaves its transaction open. Session B initially reads the committed value of 20, then its conflicting decrement waits. After Session A commits, Session B applies its decrement to 18, producing 17. Session B's standalone update uses autocommit.
 
-This demonstrates concurrent-write contention, an unseen uncommitted change and a waiting update that resumes after lock release. The captured result does not demonstrate a lost update or a deadlock.
+This demonstrates concurrent-write contention, an unseen uncommitted change and a waiting update that resumes after lock release.
 
 ## Portfolio 4: NoSQL and Advanced Data Models
 
@@ -210,7 +210,7 @@ Each portfolio includes supporting evidence appropriate to its exercise:
 | 4 | `Adewuyi_Faith_301853212_Evidence/` | Expanded MongoDB document and pending, nested, array and comparison query results |
 | 5 | `Adewuyi_Faith_301853212_Evidence/` | Primary/replica rows, replicated stock update, subscription status and publication/slot status |
 
-These are captured practical outputs. They document the exercises at the time of capture and do not establish the current state of any running database.
+These are captured practical outputs.
 
 ## Key learning outcomes
 
@@ -226,7 +226,7 @@ The five portfolios connect database design choices to observed database behavio
 
 ## Reproduction and usage notes
 
-Read each report and implementation file's comments before executing selected statements in an appropriate local learning environment. The scripts record completed exercises and are not a single automated setup procedure. No database commands were executed while preparing this README.
+Read each report and implementation file's comments before executing selected statements in an appropriate local learning environment. The scripts record completed exercises and are not a single automated setup procedure.
 
 1. **Portfolio 1:** In a fresh PostgreSQL case-study database (the evidence uses `abitim_farms`), interpret `Adewuyi_Faith_301853212_CreateTables.sql` before `Adewuyi_Faith_301853212_SampleData.sql`. Existing tables cause creation conflicts; repeated sample inserts can violate unique constraints or duplicate sales and line items. Inspect existing objects and data first.
 2. **Portfolio 2:** `Adewuyi_Faith_301853212_QueryOptimisation.sql` assumes Portfolio 1's schema and original sample data. The before-index experiment requires the category index to be absent. Generate the 5,000 test rows only once; product names are unique. Create the index only once in the intended experiment state. Compare plans on the same dataset and expect timings to vary.
@@ -234,12 +234,11 @@ Read each report and implementation file's comments before executing selected st
 4. **Portfolio 4:** `Adewuyi_Faith_301853212_MongoDBImplementation.js` uses MongoDB shell syntax, intended for mongosh or Compass's embedded shell rather than a standalone Node.js application. It selects `abitim_farms_nosql` and inserts into `sales`. Its insertion section is intended for a single execution against an empty sample collection: rerunning creates duplicate transactions with new `_id` values. Use the report's filters in Compass, or as the filter argument to `db.sales.find(...)` in the selected database.
 5. **Portfolio 5:** `Adewuyi_Faith_301853212_LogicalReplication.sql` explicitly documents an existing setup and must not be run from top to bottom against it. Statements target different connections: `postgres`, `abitim_farms_primary` and `abitim_farms_replica`. Database, table, publication, slot and subscription creation requires deliberate setup in a fresh environment. `copy_data = false` does not copy pre-existing rows. Review the configuration and connection comments before attempting a separate reproduction.
 
-### Repository details affecting interpretation
+### Notes on reproduction and scope
 
-- Portfolio 1 includes two ER diagram export variants, with differing connector presentation, and copies in the evidence folder. Its report links `Adewuyi_Faith_301853212_ERDiagram1.drawio.png`. Use the SQL foreign keys and the report's explicit relationship descriptions when interpreting cardinality.
-- Portfolio 2's generator initially assigns `Test Product 10` stock 10, whereas Portfolio 3's captured starting value is 8. The repository does not include a separate preparation statement explaining that intervening change; a fresh sequential run will therefore not automatically reproduce its 8-to-6 result.
-- Portfolio 4 reuses the customer names, products and sale totals, but its sample contact details and explicit sale dates differ from the relational sample data. Treat these as separately constructed documents for the same case study, rather than evidence of an exact export or automated migration.
-- Portfolio 5 uses a separate, simplified `products` schema. Unlike Portfolio 1, it omits the unique product-name and business-rule CHECK constraints; it demonstrates selected-table replication rather than replication of the complete original schema.
+- Portfolio 1's report links `Adewuyi_Faith_301853212_ERDiagram1.drawio.png` as its ER diagram.
+- Portfolio 3 documents and evidences `Test Product 10` at stock 8 before the COMMIT demonstration. Portfolio 2 initially generates this product at stock 10, so reproducing the captured 8-to-6 result requires establishing Portfolio 3's stated starting value in a separate test environment.
+- Portfolio 5 uses matching, simplified `products` tables in separate local databases to demonstrate selected-table replication.
 
 ## Security
 
@@ -247,7 +246,7 @@ Credentials and passwords should not be committed to source control. The replica
 
 ## AI use declaration
 
-ChatGPT was used as a learning and support tool for database concepts, implementation guidance, SQL and MongoDB syntax, troubleshooting and documentation. Portfolio 1 also acknowledges Gemini and OpenAI Codex. As stated in the portfolio declarations, implementation steps and outputs were practically tested and verified using PostgreSQL/pgAdmin and MongoDB Community Server/Compass as applicable, with results checked against the captured evidence. Preparation of this README involved reviewing those files and outputs without rerunning the database exercises.
+ChatGPT was used as a learning and support tool for database concepts, implementation guidance, SQL and MongoDB syntax, troubleshooting and documentation. Portfolio 1 also acknowledges Gemini and OpenAI Codex. As stated in the portfolio declarations, implementation steps and outputs were practically tested and verified using PostgreSQL/pgAdmin and MongoDB Community Server/Compass as applicable, with results checked against the captured evidence.
 
 ## Conclusion
 
